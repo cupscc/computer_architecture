@@ -2,7 +2,6 @@ module tb;
 reg        clk   ;
 reg        resetn;     
 reg [3 :0] switch;    //input
-
 initial
 begin
     #100;
@@ -31,16 +30,12 @@ begin
     #100;
     switch = 4'h0;  //~switch: f
 end
-
 show_sw  u_show_sw(
     .clk    (clk    ),          
     .resetn (resetn ),     
-
     .switch (switch ),    //input
-
-    .num_csn(),   //new value   
-    .num_a_g(),      
-
-    .led    ()    //previous value
+    .num_csn(num_csn),   //new value   
+    .num_a_g(num_a_g),      
+    .led    (led)    //previous value
 );
 endmodule

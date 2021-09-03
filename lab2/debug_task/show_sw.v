@@ -7,7 +7,6 @@ module show_sw (
 
     output     [7 :0] num_csn,   //new value   
     output     [6 :0] num_a_g,      
-
     output     [3 :0] led        //previous value
 );
 //1. get switch data
@@ -16,7 +15,6 @@ module show_sw (
 //   if >=10, digital number keep old data.
 //3. show previous switch data in led.
 //   can show any switch data.
-
 reg [3:0] show_data;
 reg [3:0] show_data_r;
 reg [3:0] prev_data;
@@ -24,8 +22,10 @@ reg [3:0] prev_data;
 //new value
 always @(posedge clk)
 begin
-    show_data   <= ~switch;
+    show_data <= ~switch;
 end
+//assign  show_data   = ~switch;
+
 
 always @(posedge clk)
 begin
@@ -86,7 +86,7 @@ end
 
 //keep unchange if show_dtaa>=10
 wire [6:0] keep_a_g;
-assign     keep_a_g = num_a_g + nxt_a_g;
+assign     keep_a_g = num_a_g;
 
 assign nxt_a_g = show_data==4'd0 ? 7'b1111110 :   //0
                  show_data==4'd1 ? 7'b0110000 :   //1
@@ -94,7 +94,7 @@ assign nxt_a_g = show_data==4'd0 ? 7'b1111110 :   //0
                  show_data==4'd3 ? 7'b1111001 :   //3
                  show_data==4'd4 ? 7'b0110011 :   //4
                  show_data==4'd5 ? 7'b1011011 :   //5
-                 show_data==4'd6 ? 7'b0011111 :   //6
+                 show_data==4'd6 ? 7'b1011111 :   //6
                  show_data==4'd7 ? 7'b1110000 :   //7
                  show_data==4'd8 ? 7'b1111111 :   //8
                  show_data==4'd9 ? 7'b1111011 :   //9
