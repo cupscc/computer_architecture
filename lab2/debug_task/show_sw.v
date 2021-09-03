@@ -17,15 +17,12 @@ module show_sw (
 //3. show previous switch data in led.
 //   can show any switch data.
 
-reg [3:0] show_data;
+wire [3:0] show_data;
 reg [3:0] show_data_r;
 reg [3:0] prev_data;
 
 //new value
-always @(posedge clk)
-begin
-    show_data   <= ~switch;
-end
+assign show_data  = ~switch;
 
 always @(posedge clk)
 begin
@@ -38,9 +35,10 @@ begin
     begin
         prev_data <= 4'd0;
     end
-    else if(show_data_r != show_data)
+    else 
     begin
-        prev_data <= show_data_r;
+        if(show_data_r != show_data)
+            prev_data <= show_data_r;
     end
 end
 
@@ -51,6 +49,7 @@ assign led = ~prev_data;
 show_num u_show_num(
         .clk        (clk      ),
         .resetn     (resetn   ),
+        
         .show_data  (show_data),
         .num_csn    (num_csn  ),
         .num_a_g    (num_a_g  )
@@ -86,15 +85,14 @@ end
 
 //keep unchange if show_dtaa>=10
 wire [6:0] keep_a_g;
-assign     keep_a_g = num_a_g + nxt_a_g;
-
+assign     keep_a_g = num_a_g;
 assign nxt_a_g = show_data==4'd0 ? 7'b1111110 :   //0
                  show_data==4'd1 ? 7'b0110000 :   //1
                  show_data==4'd2 ? 7'b1101101 :   //2
                  show_data==4'd3 ? 7'b1111001 :   //3
                  show_data==4'd4 ? 7'b0110011 :   //4
                  show_data==4'd5 ? 7'b1011011 :   //5
-                 show_data==4'd6 ? 7'b0011111 :   //6
+                 show_data==4'd6 ? 7'b1011111 :   //6
                  show_data==4'd7 ? 7'b1110000 :   //7
                  show_data==4'd8 ? 7'b1111111 :   //8
                  show_data==4'd9 ? 7'b1111011 :   //9

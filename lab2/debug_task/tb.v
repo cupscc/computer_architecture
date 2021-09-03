@@ -2,6 +2,9 @@ module tb;
 reg        clk   ;
 reg        resetn;     
 reg [3 :0] switch;    //input
+wire [7 :0] num_csn;  //new value   
+wire [6 :0] num_a_g;      
+wire [3 :0] led;
 
 initial
 begin
@@ -38,9 +41,9 @@ show_sw  u_show_sw(
 
     .switch (switch ),    //input
 
-    .num_csn(),   //new value   
-    .num_a_g(),      
+    .num_csn(num_csn),   //new value   
+    .num_a_g(num_a_g),      
 
-    .led    ()    //previous value
+    .led    (led)    //previous value
 );
 endmodule
