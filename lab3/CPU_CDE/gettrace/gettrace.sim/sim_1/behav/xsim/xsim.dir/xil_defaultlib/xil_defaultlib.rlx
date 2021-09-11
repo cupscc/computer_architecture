@@ -1,0 +1,10 @@
+0.6
+2019.2
+Nov  6 2019
+21:57:16
+E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/gettrace/gettrace.sim/sim_1/behav/xsim/glbl.v,1573089660,verilog,,,,glbl,,,,,,,,
+E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/gettrace/src/BRIDGE/bridge_1x2.v,1630940090,verilog,,E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/gettrace/src/CONFREG/confreg.v,,bridge_1x2,,,,,,,,
+E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/gettrace/src/CONFREG/confreg.v,1630940090,verilog,,E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/gettrace/src/soc_lite_top.v,,confreg,,,,,,,,
+E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/gettrace/src/myCPU/SimpleLACoreWrapRAM.v,1630940090,verilog,,E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/gettrace/src/BRIDGE/bridge_1x2.v,,SimpleLACore;SimpleLACoreWrapRAM,,,,,,,,
+E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/gettrace/src/soc_lite_top.v,1630940090,verilog,,E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/gettrace/src/tb_top.v,,soc_lite_top,,,,,,,,
+E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/gettrace/src/tb_top.v,1630940090,verilog,,,,tb_top,,,,,,,,
