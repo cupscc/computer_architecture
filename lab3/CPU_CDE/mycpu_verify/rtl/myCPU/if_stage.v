@@ -6,10 +6,10 @@ module if_stage(
     //allwoin
     input                          ds_allowin     ,
     //brbus
-    input  [`BR_BUS_WD       -1:0] br_bus         ,
+    input  [`BR_BUS_WD       -1 :0] br_bus         ,
     //to ds
     output                         fs_to_ds_valid ,
-    output [`FS_TO_DS_BUS_WD -1:0] fs_to_ds_bus   ,
+    output [`FS_TO_DS_BUS_WD -1 :0] fs_to_ds_bus   ,
     // inst sram interface
     output        inst_sram_en   ,
     output [ 3:0] inst_sram_wen  ,
@@ -33,7 +33,7 @@ assign {br_taken,br_target} = br_bus;
 wire [31:0] fs_inst;
 reg  [31:0] fs_pc;
 assign fs_to_ds_bus = {fs_inst ,
-                       fs_pc   };
+                       fs_pc };
 
 // pre-IF stage
 assign to_fs_valid  = ~reset;

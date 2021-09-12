@@ -8,7 +8,7 @@ module id_stage(
     output                         ds_allowin    ,
     //from fs
     input                          fs_to_ds_valid,
-    input  [`FS_TO_DS_BUS_WD -1:0] fs_to_ds_bus  ,
+    input  [`FS_TO_DS_BUS_WD -1 :0] fs_to_ds_bus  ,
     //to es
     output                         ds_to_es_valid,
     output [`DS_TO_ES_BUS_WD -1:0] ds_to_es_bus  ,
@@ -26,7 +26,7 @@ reg  [`FS_TO_DS_BUS_WD -1:0] fs_to_ds_bus_r;
 wire [31:0] ds_inst;
 wire [31:0] ds_pc  ;
 assign {ds_inst,
-        ds_pc  } = fs_to_ds_bus_r;
+        ds_pc} = fs_to_ds_bus_r;
 
 wire        rf_we   ;
 wire [ 4:0] rf_waddr;
@@ -109,7 +109,8 @@ wire        rj_eq_rd;
 
 assign br_bus       = {br_taken,br_target};
 
-assign ds_to_es_bus = {alu_op      ,  //149:138
+assign ds_to_es_bus = br_taken_r?     150'b0:
+                    {alu_op      ,  //149:138
                        load_op     ,  //137:137
                        src1_is_pc  ,  //136:136
                        src2_is_imm ,  //135:135
@@ -121,11 +122,17 @@ assign ds_to_es_bus = {alu_op      ,  //149:138
                        rkd_value   ,  //63 :32
                        ds_pc          //31 :0
                       };
-
 assign ds_ready_go    = 1'b1;
 assign ds_allowin     = !ds_valid || ds_ready_go && es_allowin;
 assign ds_to_es_valid = ds_valid && ds_ready_go;
 always @(posedge clk) begin 
+    if (reset) begin     
+        ds_valid <= 1'b0;
+    end
+    else if (ds_allowin) begin 
+        ds_valid <= fs_to_ds_valid;
+    end//change
+
     if (fs_to_ds_valid && ds_allowin) begin
         fs_to_ds_bus_r <= fs_to_ds_bus;
     end
@@ -184,26 +191,26 @@ assign alu_op[ 8] = inst_slli_w;
 assign alu_op[ 9] = inst_srli_w;
 assign alu_op[10] = inst_srai_w;
 assign alu_op[11] = inst_lu12i_w;
-
+assign load_op    = inst_ld_w;//change
 
 assign need_ui5   =  inst_slli_w | inst_srli_w | inst_srai_w;
 assign need_si12  =  inst_addi_w | inst_ld_w | inst_st_w;
 assign need_si16  =  inst_jirl | inst_beq | inst_bne;
 assign need_si20  =  inst_lu12i_w;
 assign need_si26  =  inst_b | inst_bl;
-assign src2_is_4  =  inst_jirl | inst_bl;
+assign src2_is_4  =  inst_jirl | inst_bl;//pc+4
 
 
-assign ds_imm = src2_is_4 ? 32'h4                      :
+assign ds_imm = src2_is_4 ? 32'h4               :
 		need_si20 ? {12'b0,i20[4:0],i20[19:5]} :  //i20[16:5]==i12[11:0]
   /*need_ui5 || need_si12*/ {{20{i12[11]}}, i12[11:0]} ;
 
 assign br_offs = need_si26 ? {{ 4{i26[25]}}, i26[25:0], 2'b0} : 
                              {{14{i16[15]}}, i16[15:0], 2'b0} ;
 
-assign jirl_offs = {{14{i16[15]}}, i16[15:0], 2'b0};
+assign jirl_offs = {{14{i16[15]}}, i16[15:0], 2'b0};//jirl offset process
 
-assign src_reg_is_rd = inst_beq | inst_bne | inst_st_w;
+assign src_reg_is_rd = inst_beq | inst_bne | inst_st_w;//
 
 assign src1_is_pc    = inst_jirl | inst_bl;
 
@@ -242,12 +249,20 @@ assign rj_value  = rf_rdata1;
 assign rkd_value = rf_rdata2;
 
 assign rj_eq_rd = (rj_value == rkd_value);
+reg    br_taken_r;
+always @(posedge clk) begin
+    if(reset)
+        br_taken_r <= 0;
+    else
+        br_taken_r <= br_taken;
+end//change
 assign br_taken = (   inst_beq  &&  rj_eq_rd
                    || inst_bne  && !rj_eq_rd
                    || inst_jirl
                    || inst_bl
                    || inst_b
-                  ) && ds_valid; 
+                  ) && ds_valid && br_taken_r == 0; 
+//assign ds_pc = ds_pc - 32'd4;
 assign br_target = (inst_beq || inst_bne || inst_bl || inst_b) ? (ds_pc + br_offs) :
                                                    /*inst_jirl*/ (rj_value + jirl_offs);
 

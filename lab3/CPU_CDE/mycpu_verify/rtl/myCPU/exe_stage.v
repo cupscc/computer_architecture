@@ -85,12 +85,12 @@ assign es_alu_src2 = es_src2_is_imm ? es_imm :
 
 alu u_alu(
     .alu_op     (es_alu_op    ),
-    .alu_src1   (es_alu_src2  ),
+    .alu_src1   (es_alu_src1  ),//change
     .alu_src2   (es_alu_src2  ),
     .alu_result (es_alu_result)
     );
 
-assign data_sram_en    = (es_res_from_mem || es_mem_we) && es_valid;
+assign data_sram_en    = (es_res_from_mem || es_mem_we) && es_valid;//visit mem....en/wen
 assign data_sram_wen   = es_mem_we ? 4'hf : 4'h0;
 assign data_sram_addr  = es_alu_result;
 assign data_sram_wdata = es_rkd_value;
