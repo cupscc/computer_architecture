@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-| Date         : Sun Sep 12 11:55:04 2021
+| Date         : Tue Sep 21 12:58:38 2021
 | Host         : DESKTOP-LM951GG running 64-bit major release  (build 9200)
 | Command      : report_drc -file soc_lite_top_drc_opted.rpt -pb soc_lite_top_drc_opted.pb -rpx soc_lite_top_drc_opted.rpx
 | Design       : soc_lite_top

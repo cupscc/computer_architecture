@@ -1,7 +1,7 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
--- Date        : Fri Sep 10 20:05:09 2021
+-- Date        : Mon Sep 20 21:30:33 2021
 -- Host        : DESKTOP-LM951GG running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode synth_stub
 --               E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/xilinx_ip/inst_ram/inst_ram_stub.vhdl

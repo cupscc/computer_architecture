@@ -10,6 +10,7 @@ module wb_stage(
     input  [`MS_TO_WS_BUS_WD -1:0]  ms_to_ws_bus  ,
     //to rf: for write back
     output [`WS_TO_RF_BUS_WD -1:0]  ws_to_rf_bus  ,
+    output [`TRACE_BACK - 1:0]      ws_back_djk   ,
     //trace debug interface
     output [31:0] debug_wb_pc     ,
     output [ 3:0] debug_wb_rf_wen ,
@@ -38,7 +39,9 @@ assign ws_to_rf_bus = {rf_we   ,  //37:37
                        rf_waddr,  //36:32
                        rf_wdata   //31:0
                       };
-
+assign ws_back_djk = {rf_we,
+                      rf_waddr
+                     };
 assign ws_ready_go = 1'b1;
 assign ws_allowin  = !ws_valid || ws_ready_go;
 always @(posedge clk) begin

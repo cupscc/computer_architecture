@@ -9,6 +9,9 @@ module id_stage(
     //from fs
     input                          fs_to_ds_valid,
     input  [`FS_TO_DS_BUS_WD -1 :0] fs_to_ds_bus  ,
+    input [`TRACE_BACK - 1:0]      ws_back_djk  ,
+    input [`TRACE_BACK - 1:0]      mem_back_djk  ,
+    input [`TRACE_BACK - 1:0]      exe_back_djk  ,
     //to es
     output                         ds_to_es_valid,
     output [`DS_TO_ES_BUS_WD -1:0] ds_to_es_bus  ,
@@ -106,10 +109,8 @@ wire [ 4:0] rf_raddr2;
 wire [31:0] rf_rdata2;
 
 wire        rj_eq_rd;
-
 assign br_bus       = {br_taken,br_target};
-
-assign ds_to_es_bus = br_taken_r?     150'b0:
+assign ds_to_es_bus = 
                     {alu_op      ,  //149:138
                        load_op     ,  //137:137
                        src1_is_pc  ,  //136:136
@@ -122,13 +123,16 @@ assign ds_to_es_bus = br_taken_r?     150'b0:
                        rkd_value   ,  //63 :32
                        ds_pc          //31 :0
                       };
-assign ds_ready_go    = 1'b1;
+
+assign ds_ready_go    = ~raw;
 assign ds_allowin     = !ds_valid || ds_ready_go && es_allowin;
 assign ds_to_es_valid = ds_valid && ds_ready_go;
 always @(posedge clk) begin 
     if (reset) begin     
         ds_valid <= 1'b0;
     end
+    else if(br_taken&&ds_ready_go)
+        ds_valid <= 1'b0;
     else if (ds_allowin) begin 
         ds_valid <= fs_to_ds_valid;
     end//change
@@ -157,14 +161,14 @@ decoder_4_16 u_dec1(.in(op_25_22 ), .out(op_25_22_d ));
 decoder_2_4  u_dec2(.in(op_21_20 ), .out(op_21_20_d ));
 decoder_5_32 u_dec3(.in(op_19_15 ), .out(op_19_15_d ));
 
-assign inst_add_w  = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h00];
+assign inst_add_w  = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h00];//rd rj rk 
 assign inst_sub_w  = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h02];
 assign inst_slt    = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h04];
 assign inst_sltu   = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h05];
 assign inst_nor    = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h08];
 assign inst_and    = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h09];
 assign inst_or     = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h0a];
-assign inst_xor    = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h0b];
+assign inst_xor    = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h0b];//rd rj
 assign inst_slli_w = op_31_26_d[6'h00] & op_25_22_d[4'h1] & op_21_20_d[2'h0] & op_19_15_d[5'h01];
 assign inst_srli_w = op_31_26_d[6'h00] & op_25_22_d[4'h1] & op_21_20_d[2'h0] & op_19_15_d[5'h09];
 assign inst_srai_w = op_31_26_d[6'h00] & op_25_22_d[4'h1] & op_21_20_d[2'h0] & op_19_15_d[5'h11];
@@ -172,11 +176,11 @@ assign inst_addi_w = op_31_26_d[6'h00] & op_25_22_d[4'ha];
 assign inst_ld_w   = op_31_26_d[6'h0a] & op_25_22_d[4'h2];
 assign inst_st_w   = op_31_26_d[6'h0a] & op_25_22_d[4'h6];
 assign inst_jirl   = op_31_26_d[6'h13];
-assign inst_b      = op_31_26_d[6'h14];
-assign inst_bl     = op_31_26_d[6'h15];
-assign inst_beq    = op_31_26_d[6'h16];
+assign inst_b      = op_31_26_d[6'h14];//rd :1 
+assign inst_bl     = op_31_26_d[6'h15];//rd :1
+assign inst_beq    = op_31_26_d[6'h16];//rd rj
 assign inst_bne    = op_31_26_d[6'h17];
-assign inst_lu12i_w= op_31_26_d[6'h05] & ~ds_inst[25];
+assign inst_lu12i_w= op_31_26_d[6'h05] & ~ds_inst[25];//rd
 
 assign alu_op[ 0] = inst_add_w | inst_addi_w | inst_ld_w | inst_st_w 
                     | inst_jirl | inst_bl;
@@ -200,6 +204,31 @@ assign need_si20  =  inst_lu12i_w;
 assign need_si26  =  inst_b | inst_bl;
 assign src2_is_4  =  inst_jirl | inst_bl;//pc+4
 
+
+wire        raw;      //read after write
+wire        raw_rk;
+wire        raw_rj;
+wire        raw_rd;
+wire        read_rj;
+wire        read_rk;
+wire        read_rd;
+
+assign      read_rk = inst_add_w||inst_sub_w||inst_slt||inst_sltu||inst_nor||inst_and||inst_xor||inst_or;
+assign      read_rj = read_rk || inst_slli_w ||inst_srai_w ||inst_srli_w || inst_addi_w ||inst_ld_w ||inst_st_w ||inst_jirl||inst_beq||inst_bne;
+assign      read_rd = inst_beq || inst_bne ||inst_st_w ||inst_ld_w;
+assign raw_rk       = (ws_back_djk[5]&&ws_back_djk[4:0]==rk)  ||
+                      (mem_back_djk[5]&&mem_back_djk[4:0]==rk)||
+                      (exe_back_djk[5]&&exe_back_djk[4:0]==rk)
+                      ;
+assign raw_rj       = (ws_back_djk[5]&&ws_back_djk[4:0]==rj)  ||
+                      (mem_back_djk[5]&&mem_back_djk[4:0]==rj)||
+                      (exe_back_djk[5]&&exe_back_djk[4:0]==rj)
+                      ;
+assign raw_rd       = (ws_back_djk[5]&&ws_back_djk[4:0]==rd)  ||
+                      (mem_back_djk[5]&&mem_back_djk[4:0]==rd)||
+                      (exe_back_djk[5]&&exe_back_djk[4:0]==rd)
+                      ;
+assign raw          = (raw_rk&&read_rk&&rk!=5'b0)||(raw_rj&&read_rj&&rj!=5'b0)||(raw_rd&&read_rd&&rd!=5'b0);
 
 assign ds_imm = src2_is_4 ? 32'h4               :
 		need_si20 ? {12'b0,i20[4:0],i20[19:5]} :  //i20[16:5]==i12[11:0]
@@ -244,24 +273,18 @@ regfile u_regfile(
     .wdata  (rf_wdata )
     );
 
-
 assign rj_value  = rf_rdata1; 
 assign rkd_value = rf_rdata2;
 
 assign rj_eq_rd = (rj_value == rkd_value);
-reg    br_taken_r;
-always @(posedge clk) begin
-    if(reset)
-        br_taken_r <= 0;
-    else
-        br_taken_r <= br_taken;
-end//change
+
+
 assign br_taken = (   inst_beq  &&  rj_eq_rd
                    || inst_bne  && !rj_eq_rd
                    || inst_jirl
                    || inst_bl
                    || inst_b
-                  ) && ds_valid && br_taken_r == 0; 
+) && ds_valid; 
 //assign ds_pc = ds_pc - 32'd4;
 assign br_target = (inst_beq || inst_bne || inst_bl || inst_b) ? (ds_pc + br_offs) :
                                                    /*inst_jirl*/ (rj_value + jirl_offs);

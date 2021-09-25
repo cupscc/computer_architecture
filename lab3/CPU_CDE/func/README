@@ -20,4 +20,4 @@ srai.w
 ld.w
 st.w
 
-//PS:without data dependency 
+//PS:has data dependency 

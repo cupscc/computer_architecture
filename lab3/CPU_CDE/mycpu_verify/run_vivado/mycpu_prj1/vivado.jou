@@ -2,85 +2,150 @@
 # Vivado v2019.2 (64-bit)
 # SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
 # IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
-# Start of session at: Fri Sep 10 19:55:15 2021
-# Process ID: 16260
+# Start of session at: Mon Sep 20 21:22:02 2021
+# Process ID: 7904
 # Current directory: E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1
-# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent25060 E:\2021autum\computerarchitectureseminar\computer_architecture\lab3\CPU_CDE\mycpu_verify\run_vivado\mycpu_prj1\mycpu.xpr
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent11012 E:\2021autum\computerarchitectureseminar\computer_architecture\lab3\CPU_CDE\mycpu_verify\run_vivado\mycpu_prj1\mycpu.xpr
 # Log file: E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/vivado.log
 # Journal file: E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1\vivado.jou
 #-----------------------------------------------------------
 start_gui
 open_project E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.xpr
 update_compile_order -fileset sources_1
-generate_target all [get_files E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/xilinx_ip/clk_pll/clk_pll.xci]
-export_ip_user_files -of_objects [get_files E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/xilinx_ip/clk_pll/clk_pll.xci] -no_script -sync -force -quiet
-export_simulation -of_objects [get_files E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/xilinx_ip/clk_pll/clk_pll.xci] -directory E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.ip_user_files/sim_scripts -ip_user_files_dir E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.ip_user_files -ipstatic_source_dir E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.ip_user_files/ipstatic -lib_map_path [list {modelsim=E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.cache/compile_simlib/modelsim} {questa=E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.cache/compile_simlib/questa} {riviera=E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.cache/compile_simlib/riviera} {activehdl=E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
-create_fileset -blockset clk_pll
-set_property top clk_pll [get_fileset clk_pll]
-move_files -fileset [get_fileset clk_pll] [get_files -of_objects [get_fileset sources_1] E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/xilinx_ip/clk_pll/clk_pll.xci]
-generate_target all [get_files E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/xilinx_ip/data_ram/data_ram.xci]
-export_ip_user_files -of_objects [get_files E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/xilinx_ip/data_ram/data_ram.xci] -no_script -sync -force -quiet
-export_simulation -of_objects [get_files E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/xilinx_ip/data_ram/data_ram.xci] -directory E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.ip_user_files/sim_scripts -ip_user_files_dir E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.ip_user_files -ipstatic_source_dir E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.ip_user_files/ipstatic -lib_map_path [list {modelsim=E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.cache/compile_simlib/modelsim} {questa=E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.cache/compile_simlib/questa} {riviera=E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.cache/compile_simlib/riviera} {activehdl=E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
-create_fileset -blockset data_ram
-set_property top data_ram [get_fileset data_ram]
-move_files -fileset [get_fileset data_ram] [get_files -of_objects [get_fileset sources_1] E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/xilinx_ip/data_ram/data_ram.xci]
-generate_target all [get_files E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/xilinx_ip/inst_ram/inst_ram.xci]
+
+set_property -dict [list CONFIG.Coe_File {E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/func/obj/inst_ram.coe}] [get_ips inst_ram]
+generate_target all [get_files  E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/xilinx_ip/inst_ram/inst_ram.xci]
+catch { config_ip_cache -export [get_ips -all inst_ram] }
 export_ip_user_files -of_objects [get_files E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/xilinx_ip/inst_ram/inst_ram.xci] -no_script -sync -force -quiet
+reset_run inst_ram_synth_1
+launch_runs -jobs 6 inst_ram_synth_1
 export_simulation -of_objects [get_files E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/xilinx_ip/inst_ram/inst_ram.xci] -directory E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.ip_user_files/sim_scripts -ip_user_files_dir E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.ip_user_files -ipstatic_source_dir E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.ip_user_files/ipstatic -lib_map_path [list {modelsim=E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.cache/compile_simlib/modelsim} {questa=E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.cache/compile_simlib/questa} {riviera=E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.cache/compile_simlib/riviera} {activehdl=E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
-create_fileset -blockset inst_ram
-set_property top inst_ram [get_fileset inst_ram]
-move_files -fileset [get_fileset inst_ram] [get_files -of_objects [get_fileset sources_1] E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/xilinx_ip/inst_ram/inst_ram.xci]
-launch_run {clk_pll_synth_1 data_ram_synth_1 inst_ram_synth_1}
-wait_on_run clk_pll_synth_1
-
-wait_on_run clk_pll_synth_1
-wait_on_run data_ram_synth_1
-
-wait_on_run clk_pll_synth_1
-wait_on_run data_ram_synth_1
-wait_on_run inst_ram_synth_1
-
+launch_simulation
+launch_simulation
+launch_simulation
+launch_simulation
 launch_simulation
 source tb_top.tcl
-current_wave_config {Untitled 1}
-add_wave {{/tb_top/soc_lite/cpu}} 
-relaunch_sim
-current_wave_config {Untitled 1}
-add_wave {{/tb_top/soc_lite/cpu/if_stage/fs_pc}} 
-relaunch_sim
+run all
 current_wave_config {Untitled 1}
 add_wave {{/tb_top/soc_lite/cpu/if_stage}} 
-relaunch_sim
-current_wave_config {Untitled 1}
+close_sim
+launch_simulation
+source tb_top.tcl
+run all
+run all
+close_sim
+launch_simulation
+source tb_top.tcl
+run all
+close_sim
+launch_simulation
+source tb_top.tcl
+run all
+current_wave_config {Untitled 4}
+add_wave {{/tb_top/soc_lite/cpu/if_stage}} 
+current_wave_config {Untitled 4}
 add_wave {{/tb_top/soc_lite/cpu/id_stage}} 
-relaunch_sim
+close_sim
+launch_simulation
+source tb_top.tcl
+run all
+close_sim
+launch_simulation
+source tb_top.tcl
+run all
+close_sim
+launch_simulation
+launch_simulation
+source tb_top.tcl
+run all
+current_wave_config {Untitled 7}
+add_wave {{/tb_top/soc_lite/cpu/id_stage}} 
+current_wave_config {Untitled 7}
+add_wave {{/tb_top/soc_lite/cpu/if_stage}} 
 relaunch_sim
 run all
 close_sim
 launch_simulation
 source tb_top.tcl
-current_wave_config {Untitled 2}
+run all
+current_wave_config {Untitled 8}
 add_wave {{/tb_top/soc_lite/cpu/if_stage}} 
-current_wave_config {Untitled 2}
+current_wave_config {Untitled 8}
 add_wave {{/tb_top/soc_lite/cpu/id_stage}} 
 relaunch_sim
+run all
+relaunch_sim
+run all
 relaunch_sim
 relaunch_sim
-close_sim
-launch_simulation
-source tb_top.tcl
-current_wave_config {Untitled 3}
-add_wave {{/tb_top/soc_lite/cpu/if_stage}} 
+run all
 relaunch_sim
-current_wave_config {Untitled 3}
-add_wave {{/tb_top/soc_lite/cpu/id_stage}} 
+run all
 relaunch_sim
-close_sim
-launch_simulation
-source tb_top.tcl
-current_wave_config {Untitled 4}
-add_wave {{/tb_top/soc_lite/cpu/if_stage}} 
-current_wave_config {Untitled 4}
-add_wave {{/tb_top/soc_lite/cpu/id_stage}} 
+run all
 relaunch_sim
+run all
+relaunch_sim
+run all
+run all
+relaunch_sim
+relaunch_sim
+run all
+relaunch_sim
+run all
+relaunch_sim
+run all
+relaunch_sim
+run all
+run all
+relaunch_sim
+run all
+relaunch_sim
+run all
+relaunch_sim
+run all
+relaunch_sim
+run all
+relaunch_sim
+run all
+relaunch_sim
+run all
+relaunch_sim
+run all
+relaunch_sim
+relaunch_sim
+run all
+relaunch_sim
+run all
+relaunch_sim
+run all
+relaunch_sim
+run all
+relaunch_sim
+run all
+relaunch_sim
+run all
+relaunch_sim
+run all
+relaunch_sim
+run all
+relaunch_sim
+run all
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 6
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -url localhost:3121 -allow_non_jtag
+current_hw_target [get_hw_targets */xilinx_tcf/Digilent/210251A08870]
+set_property PARAM.FREQUENCY 15000000 [get_hw_targets */xilinx_tcf/Digilent/210251A08870]
+open_hw_target
+set_property PROGRAM.FILE {E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.runs/impl_1/soc_lite_top.bit} [get_hw_devices xc7a200t_0]
+current_hw_device [get_hw_devices xc7a200t_0]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7a200t_0] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7a200t_0]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7a200t_0]
+set_property PROGRAM.FILE {E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/run_vivado/mycpu_prj1/mycpu.runs/impl_1/soc_lite_top.bit} [get_hw_devices xc7a200t_0]
+program_hw_devices [get_hw_devices xc7a200t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a200t_0] 0]
 close_sim

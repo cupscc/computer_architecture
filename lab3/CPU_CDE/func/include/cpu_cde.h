@@ -43,8 +43,8 @@
                                
 #define write_confreg_cr(num,data) *((volatile int *)(CONFREG_CR0+4*num)) = data
 #define read_confreg_cr(num,data) data=*((volatile int *)(CONFREG_CR0+4*num))
-#define nop  addi.w zero, zero, 0
-#define NOP  addi.w zero, zero, 0
+#define nop
+#define NOP
 #define NOP4 NOP;NOP;NOP;NOP
 #define LI(reg, imm) \
     lu12i.w reg , (((imm>>12)+((imm&0x00000800)>>11))&0x000fffff)&0x80000?(((imm>>12)+((imm&0x00000800)>>11))&0x000fffff)-0x100000:(((imm>>12)+((imm&0x00000800)>>11))&0x000fffff); \

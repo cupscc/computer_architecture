@@ -191,6 +191,7 @@ sub1:
     sltu    t4, t3, t2
     NOP4
     bne     t4, zero, 1f
+    nop
     addi.w  t3, t2, 0
     NOP4
 1:

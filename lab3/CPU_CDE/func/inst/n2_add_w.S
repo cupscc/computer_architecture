@@ -3,6 +3,7 @@
 #include "inst_test.h"
 
 LEAF(n2_add_w_test)
+    
     addi.w s0, s0 ,1
     addi.w s2, zero, 0x0
 ###test inst
@@ -309,6 +310,7 @@ LEAF(n2_add_w_test)
     TEST_ADD_W(0x00000000, 0x00000000, 0x00000000)
 ###detect exception
     bne s2, zero, inst_error
+    nop
 ###score ++
     addi.w s3, s3, 1
 ###output (s0<<24)|s3
@@ -319,4 +321,5 @@ inst_error:
     NOP4
     st.w t0, s1, 0
     jirl zero, ra, 0
+    nop
 END(n2_add_w_test)

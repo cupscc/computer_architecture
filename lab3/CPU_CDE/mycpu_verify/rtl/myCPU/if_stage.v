@@ -6,7 +6,7 @@ module if_stage(
     //allwoin
     input                          ds_allowin     ,
     //brbus
-    input  [`BR_BUS_WD       -1 :0] br_bus         ,
+    input  [`BR_BUS_WD        -1 :0] br_bus         ,
     //to ds
     output                         fs_to_ds_valid ,
     output [`FS_TO_DS_BUS_WD -1 :0] fs_to_ds_bus   ,
@@ -25,7 +25,6 @@ wire        to_fs_valid;
 
 wire [31:0] seq_pc;
 wire [31:0] nextpc;
-
 wire         br_taken;
 wire [ 31:0] br_target;
 assign {br_taken,br_target} = br_bus;
@@ -51,7 +50,6 @@ always @(posedge clk) begin
     else if (fs_allowin) begin
         fs_valid <= to_fs_valid;
     end
-
     if (reset) begin
         fs_pc <= 32'h1bfffffc;  //trick: to make nextpc be 0x1c000000 during reset 
     end

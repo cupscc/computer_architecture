@@ -192,7 +192,10 @@
     nop; \
     nop; \
 2000:; \
-    NOP4; \
+    nop; \
+    nop; \
+    nop; \
+    nop; \
     add.w a0, ra, zero; \
     bl 1000b; \
     nop; \
@@ -210,7 +213,7 @@
     LI (t4, f_flag_ref); \
     bne v0, t5, inst_error; \
     nop; \
-    addi.w a2, a2, 0x28; \
+    addi.w a2, a2, 3*4; \
     bne v1, t4, inst_error; \
     nop; \
     NOP4; \
@@ -235,7 +238,10 @@
     nop; \
     nop; \
 2000:; \
-    NOP4; \
+    nop; \
+    nop; \
+    nop; \
+    nop; \
     b 1000b; \
     nop; \
     b 4000f; \
@@ -249,7 +255,6 @@
     LI (t5, b_flag_ref); \
     LI (t4, f_flag_ref); \
     bne v0, t5, inst_error; \
-    nop; \
     nop; \
     bne v1, t4, inst_error; \
     nop
@@ -268,8 +273,8 @@
     nop;    \
     nop;    \
     nop;    \
-    addi.w t0, $r1, 7*4; \
-    addi.w t1, $r1, 22*4; \
+    addi.w t0, $r1, 3*4; \
+    addi.w t1, $r1, 9*4; \
     b 2000f; \
     nop; \
 1000:; \
@@ -295,6 +300,84 @@
     nop; \
     bne v1, s6, inst_error; \
     nop
+
+/* 16 */
+#define TEST_BEQ_DS(op, dest, ...) \
+    addiu s5, zero, 0x1; \
+    NOP4; \
+    beq s5, zero, 1000f; \
+    op  dest , ##__VA_ARGS__; \
+    op  s6 , ##__VA_ARGS__; \
+    NOP4; \
+    bne dest, s6, inst_error; \
+    nop; \
+    beq s5, s5, 2000f; \
+    op  s7 , ##__VA_ARGS__; \
+1000: ; \
+    b   inst_error; \
+    nop;            \
+2000: ; \
+    NOP4; \
+    bne s7, s6, inst_error; \
+    nop
+
+/* 17 */
+#define TEST_BNE_DS(op, dest, ...) \
+    addiu s5, zero, 0x1; \
+    NOP4; \
+    bne s5, s5, 1000f; \
+    op  dest, ##__VA_ARGS__; \
+    op  s6, ##__VA_ARGS__; \
+    NOP4; \
+    bne dest, s6, inst_error; \
+    nop; \
+    bne s5, zero, 2000f; \
+    op  s7, ##__VA_ARGS__; \
+1000: ; \
+    b   inst_error; \
+    nop;            \
+2000: ; \
+    NOP4; \
+    bne s7, s6, inst_error; \
+    nop
+
+/* 19 */
+#define TEST_JAL_DS(op, dest, ...) \
+    addu s7, zero, $31; \
+    op  s6, ##__VA_ARGS__; \
+    jal 2000f; \
+    op  dest, ##__VA_ARGS__; \
+1000: ; \
+    b   inst_error; \
+    nop;            \
+2000: ; \
+    NOP4; \
+    addu $31, zero, s7; \
+    bne dest, s6, inst_error; \
+    NOP4
+
+/* 20 */
+#define TEST_JR_DS(op, dest, ...) \
+    addu s7, zero, $31; \
+    jal 1f; \
+    nop;    \
+1:  ;       \
+    nop;    \
+    nop;    \
+    nop;    \
+    addiu  s5, $31, 12*4; \
+    NOP4; \
+    op  s6, ##__VA_ARGS__; \
+    jr  s5; \
+    op  dest, ##__VA_ARGS__; \
+1000: ; \
+    b   inst_error; \
+    nop;            \
+2000: ; \
+    NOP4; \
+    addu $31, zero, s7; \
+    bne dest, s6, inst_error; \
+    NOP4
 
 /* 24 */
 #define TEST_SUB_W(in_a, in_b, ref) \
