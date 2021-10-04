@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-| Date             : Tue Sep 21 13:01:29 2021
+| Date             : Tue Sep 28 18:08:44 2021
 | Host             : DESKTOP-LM951GG running 64-bit major release  (build 9200)
 | Command          : report_power -file soc_lite_top_power_routed.rpt -pb soc_lite_top_power_summary_routed.pb -rpx soc_lite_top_power_routed.rpx
 | Design           : soc_lite_top
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.303        |
+| Total On-Chip Power (W)  | 0.297        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.149        |
+| Dynamic (W)              | 0.143        |
 | Device Static (W)        | 0.153        |
 | Effective TJA (C/W)      | 1.9          |
 | Max Ambient (C)          | 84.4         |
@@ -52,20 +52,20 @@ Table of Contents
 +--------------------------+-----------+----------+-----------+-----------------+
 | On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
 +--------------------------+-----------+----------+-----------+-----------------+
-| Clocks                   |     0.010 |        6 |       --- |             --- |
-| Slice Logic              |     0.006 |     4540 |       --- |             --- |
-|   LUT as Logic           |     0.005 |     1815 |    133800 |            1.36 |
-|   LUT as Distributed RAM |    <0.001 |       48 |     46200 |            0.10 |
+| Clocks                   |     0.011 |        6 |       --- |             --- |
+| Slice Logic              |     0.004 |     4618 |       --- |             --- |
+|   LUT as Logic           |     0.003 |     1904 |    133800 |            1.42 |
 |   F7/F8 Muxes            |    <0.001 |      484 |    133800 |            0.36 |
 |   Register               |    <0.001 |     1144 |    267600 |            0.43 |
 |   CARRY4                 |    <0.001 |       56 |     33450 |            0.17 |
+|   LUT as Distributed RAM |    <0.001 |       48 |     46200 |            0.10 |
 |   Others                 |     0.000 |      726 |       --- |             --- |
-| Signals                  |     0.027 |     5120 |       --- |             --- |
+| Signals                  |     0.023 |     5293 |       --- |             --- |
 | Block RAM                |     0.004 |      320 |       365 |           87.67 |
 | PLL                      |     0.100 |        1 |        10 |           10.00 |
 | I/O                      |     0.002 |       55 |       400 |           13.75 |
 | Static Power             |     0.153 |          |           |                 |
-| Total                    |     0.303 |          |           |                 |
+| Total                    |     0.297 |          |           |                 |
 +--------------------------+-----------+----------+-----------+-----------------+
 
 
@@ -75,7 +75,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       1.000 |     0.092 |       0.055 |      0.038 |
+| Vccint    |       1.000 |     0.086 |       0.049 |      0.038 |
 | Vccaux    |       1.800 |     0.082 |       0.051 |      0.031 |
 | Vcco33    |       3.300 |     0.006 |       0.001 |      0.005 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
@@ -147,15 +147,14 @@ Table of Contents
 +------------------------+-----------+
 | Name                   | Power (W) |
 +------------------------+-----------+
-| soc_lite_top           |     0.149 |
+| soc_lite_top           |     0.143 |
 |   confreg              |     0.006 |
-|   cpu                  |     0.028 |
-|     exe_stage          |     0.008 |
+|   cpu                  |     0.022 |
+|     exe_stage          |     0.002 |
 |     id_stage           |     0.019 |
-|       u_regfile        |     0.002 |
-|   inst_ram             |     0.012 |
-|     U0                 |     0.012 |
-|       inst_blk_mem_gen |     0.012 |
+|   inst_ram             |     0.011 |
+|     U0                 |     0.011 |
+|       inst_blk_mem_gen |     0.011 |
 |   pll.clk_pll          |     0.101 |
 |     inst               |     0.101 |
 +------------------------+-----------+

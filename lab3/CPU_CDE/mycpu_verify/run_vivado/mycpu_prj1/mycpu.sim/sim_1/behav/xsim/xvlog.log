@@ -14,13 +14,14 @@ INFO: [VRFC 10-2263] Analyzing Verilog file "E:/2021autum/computerarchitecturese
 INFO: [VRFC 10-311] analyzing module confreg
 INFO: [VRFC 10-2263] Analyzing Verilog file "E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/myCPU/exe_stage.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module exe_stage
+WARNING: [VRFC 10-3380] identifier 'es_alu_result' is used before its declaration [E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/myCPU/exe_stage.v:56]
 INFO: [VRFC 10-2263] Analyzing Verilog file "E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/myCPU/id_stage.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module id_stage
-WARNING: [VRFC 10-3380] identifier 'raw' is used before its declaration [E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/myCPU/id_stage.v:127]
 INFO: [VRFC 10-2263] Analyzing Verilog file "E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/myCPU/if_stage.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module if_stage
 INFO: [VRFC 10-2263] Analyzing Verilog file "E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/myCPU/mem_stage.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module mem_stage
+WARNING: [VRFC 10-3380] identifier 'ms_final_result' is used before its declaration [E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/myCPU/mem_stage.v:37]
 INFO: [VRFC 10-2263] Analyzing Verilog file "E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/myCPU/mycpu_top.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module mycpu_top
 INFO: [VRFC 10-2263] Analyzing Verilog file "E:/2021autum/computerarchitectureseminar/computer_architecture/lab3/CPU_CDE/mycpu_verify/rtl/myCPU/regfile.v" into library xil_defaultlib

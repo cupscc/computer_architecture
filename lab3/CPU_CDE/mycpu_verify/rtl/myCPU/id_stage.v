@@ -9,9 +9,9 @@ module id_stage(
     //from fs
     input                          fs_to_ds_valid,
     input  [`FS_TO_DS_BUS_WD -1 :0] fs_to_ds_bus  ,
-    input [`TRACE_BACK - 1:0]      ws_back_djk  ,
+    //input [`TRACE_BACK - 1:0]      ws_back_djk  ,
     input [`TRACE_BACK - 1:0]      mem_back_djk  ,
-    input [`TRACE_BACK - 1:0]      exe_back_djk  ,
+    input [`EXE_TRACE_BACK - 1:0]      exe_back_djk  ,
     //to es
     output                         ds_to_es_valid,
     output [`DS_TO_ES_BUS_WD -1:0] ds_to_es_bus  ,
@@ -111,7 +111,7 @@ wire [31:0] rf_rdata2;
 wire        rj_eq_rd;
 assign br_bus       = {br_taken,br_target};
 assign ds_to_es_bus = 
-                    {alu_op      ,  //149:138
+                      {alu_op      ,  //149:138
                        load_op     ,  //137:137
                        src1_is_pc  ,  //136:136
                        src2_is_imm ,  //135:135
@@ -124,7 +124,7 @@ assign ds_to_es_bus =
                        ds_pc          //31 :0
                       };
 
-assign ds_ready_go    = ~raw;
+assign ds_ready_go    = ~(exe_back_djk[38]&&(exe_back_djk[36:32]==rf_raddr1||exe_back_djk[36:32]==rf_raddr2));
 assign ds_allowin     = !ds_valid || ds_ready_go && es_allowin;
 assign ds_to_es_valid = ds_valid && ds_ready_go;
 always @(posedge clk) begin 
@@ -205,30 +205,7 @@ assign need_si26  =  inst_b | inst_bl;
 assign src2_is_4  =  inst_jirl | inst_bl;//pc+4
 
 
-wire        raw;      //read after write
-wire        raw_rk;
-wire        raw_rj;
-wire        raw_rd;
-wire        read_rj;
-wire        read_rk;
-wire        read_rd;
 
-assign      read_rk = inst_add_w||inst_sub_w||inst_slt||inst_sltu||inst_nor||inst_and||inst_xor||inst_or;
-assign      read_rj = read_rk || inst_slli_w ||inst_srai_w ||inst_srli_w || inst_addi_w ||inst_ld_w ||inst_st_w ||inst_jirl||inst_beq||inst_bne;
-assign      read_rd = inst_beq || inst_bne ||inst_st_w ||inst_ld_w;
-assign raw_rk       = (ws_back_djk[5]&&ws_back_djk[4:0]==rk)  ||
-                      (mem_back_djk[5]&&mem_back_djk[4:0]==rk)||
-                      (exe_back_djk[5]&&exe_back_djk[4:0]==rk)
-                      ;
-assign raw_rj       = (ws_back_djk[5]&&ws_back_djk[4:0]==rj)  ||
-                      (mem_back_djk[5]&&mem_back_djk[4:0]==rj)||
-                      (exe_back_djk[5]&&exe_back_djk[4:0]==rj)
-                      ;
-assign raw_rd       = (ws_back_djk[5]&&ws_back_djk[4:0]==rd)  ||
-                      (mem_back_djk[5]&&mem_back_djk[4:0]==rd)||
-                      (exe_back_djk[5]&&exe_back_djk[4:0]==rd)
-                      ;
-assign raw          = (raw_rk&&read_rk&&rk!=5'b0)||(raw_rj&&read_rj&&rj!=5'b0)||(raw_rd&&read_rd&&rd!=5'b0);
 
 assign ds_imm = src2_is_4 ? 32'h4               :
 		need_si20 ? {12'b0,i20[4:0],i20[19:5]} :  //i20[16:5]==i12[11:0]
@@ -273,8 +250,42 @@ regfile u_regfile(
     .wdata  (rf_wdata )
     );
 
-assign rj_value  = rf_rdata1; 
-assign rkd_value = rf_rdata2;
+/*wire        raw;      //read after write
+wire        raw_rk;
+wire        raw_rj;
+wire        raw_rd;*/
+wire        read_rj;
+wire        read_rk;
+wire        read_rd;
+wire        read_rkd;
+
+assign      read_rk = inst_add_w||inst_sub_w||inst_slt||inst_sltu||inst_nor||inst_and||inst_xor||inst_or;
+assign      read_rj = read_rk || inst_slli_w ||inst_srai_w ||inst_srli_w || inst_addi_w ||inst_ld_w ||inst_st_w ||inst_jirl||inst_beq||inst_bne;
+assign      read_rd = inst_beq || inst_bne ||inst_st_w ||inst_ld_w ;
+assign      read_rkd= read_rk || read_rd;
+/*assign raw_rk       = (ws_to_rf_bus[37]&&ws_to_rf_bus[36:32]==rk)||
+                      (mem_back_djk[37]&&mem_back_djk[36:32]==rk)||
+                      (exe_back_djk[37]&&exe_back_djk[36:32]==rk)
+                      ;
+assign raw_rj       = (ws_to_rf_bus[37]&&ws_to_rf_bus[36:32]==rj)||
+                      (mem_back_djk[37]&&mem_back_djk[36:32]==rj)||
+                      (exe_back_djk[37]&&exe_back_djk[36:32]==rj)
+                      ;
+assign raw_rd       = (ws_to_rf_bus[37]&&ws_to_rf_bus[36:32]==rd)||
+                      (mem_back_djk[37]&&mem_back_djk[36:32]==rd)||
+                      (exe_back_djk[37]&&exe_back_djk[36:32]==rd)
+                      ;
+assign raw          = (raw_rk&&read_rk&&rk!=5'b0)||(raw_rj&&read_rj&&rj!=5'b0)||(raw_rd&&read_rd&&rd!=5'b0);*/
+assign rj_value     = (exe_back_djk[37]&&exe_back_djk[36:32]==rj&&read_rj) ? exe_back_djk[31:0]:
+                      (mem_back_djk[37]&&mem_back_djk[36:32]==rj&&read_rj) ? mem_back_djk[31:0]:
+                      (ws_to_rf_bus[37]&&ws_to_rf_bus[36:32]==rj&&read_rj) ? ws_to_rf_bus[31:0]:
+                      rf_rdata1;
+assign rkd_value    = (exe_back_djk[37]&&exe_back_djk[36:32]==rf_raddr2&&read_rkd) ? exe_back_djk[31:0]:
+                      (mem_back_djk[37]&&mem_back_djk[36:32]==rf_raddr2&&read_rkd) ? mem_back_djk[31:0]:
+                      (ws_to_rf_bus[37]&&ws_to_rf_bus[36:32]==rf_raddr2&&read_rkd) ? ws_to_rf_bus[31:0]:
+                      rf_rdata2;
+/*assign rj_value  = rf_rdata1; 
+assign rkd_value = rf_rdata2;*/
 
 assign rj_eq_rd = (rj_value == rkd_value);
 

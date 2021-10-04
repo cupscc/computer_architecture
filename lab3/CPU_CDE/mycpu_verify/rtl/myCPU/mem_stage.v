@@ -32,8 +32,9 @@ assign {ms_res_from_mem,  //70:70
         ms_alu_result  ,  //63:32
         ms_pc             //31:0
        } = es_to_ms_bus_r;
-assign mem_back_djk = {ms_gr_we&&ms_valid,
-                       ms_dest
+assign mem_back_djk = {ms_gr_we&&ms_valid,//37:37
+                       ms_dest,//36:32
+                       ms_final_result//31:0
                       };
 wire [31:0] mem_result;
 wire [31:0] ms_final_result;

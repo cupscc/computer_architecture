@@ -12,7 +12,7 @@ module exe_stage(
     //to ms
     output                         es_to_ms_valid,
     output [`ES_TO_MS_BUS_WD -1:0] es_to_ms_bus  ,
-    output [`TRACE_BACK - 1:0]     exe_back_djk  ,
+    output [`EXE_TRACE_BACK  - 1:0]     exe_back_djk  ,
     // data sram interface
     output        data_sram_en   ,
     output [ 3:0] data_sram_wen  ,
@@ -50,8 +50,10 @@ assign {es_alu_op      ,  //149:138
         es_pc             //31 :0
        } = ds_to_es_bus_r;
 
-assign exe_back_djk = {es_gr_we&&es_valid,
-                       es_dest
+assign exe_back_djk = {es_res_from_mem&&es_valid,
+                       es_gr_we&&es_valid,
+                       es_dest,
+                       es_alu_result
                       };
 wire [31:0] es_alu_src1   ;
 wire [31:0] es_alu_src2   ;
