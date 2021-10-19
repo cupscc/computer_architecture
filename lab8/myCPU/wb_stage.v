@@ -35,6 +35,8 @@ module wb_stage(
 //wire [31:0]  csr_wvalue_wb
 //wire [31:0]  csr_wmask_wb
 //wire csr_we_wb
+wire [13:0] csr_num_wb_temp;
+wire [31:0] csr_rvalue_wb;
 wire csr_re_wb;
 wire exec_ADEF;
 wire exec_INE;
@@ -57,8 +59,8 @@ assign wb_ecode =
                 {6{exec_INE }} & `ECODE_INE |
                 {6{exec_ALE }} & `ECODE_ALE ;         
 assign wb_ex = (wb_ecode != 6'b0);
-
 assign wb_esubcode = {8{exec_ADEF}} & `ESUBCODE_ADEF;
+assign csr_num_wb = csr_num_wb_temp & {14{ws_valid}};
 assign {
         csr_wvalue_wb,  //219:188
         csr_rvalue_wb,  //187:156
@@ -66,7 +68,7 @@ assign {
         csr_wmask_wb,   //154:123
         csr_re_wb,      //122
         csr_we_wb,      //121
-        csr_num_mem,    //120:107
+        csr_num_wb_temp,    //120:107
         wb_vaddr,       //106:75
         exec_SYS,       //74
         exec_BRK,       //73

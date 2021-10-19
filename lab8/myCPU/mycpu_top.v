@@ -19,6 +19,7 @@ module mycpu_top(
     output [ 4:0] debug_wb_rf_wnum,
     output [31:0] debug_wb_rf_wdata
 );
+//top文件整体比较混乱，主要在于信号名和信号管理，周三晚上搞一下，预期把top中的信号与其他的信号分割开
 reg         reset;
 always @(posedge clk) reset <= ~resetn; 
 
@@ -64,6 +65,20 @@ wire [13:0] csr_num_exe;
 wire [13:0] csr_num_mem;
 wire csr_we_exe;
 wire csr_we_mem;
+wire csr_num_id_top;
+wire [31:0] wb_vaddr;
+wire [5:0]  wb_ecode;
+wire [8:0]  wb_esubcode;
+wire [31:0] wb_pc;
+wire [31:0] csr_wvalue_wb;
+wire [13:0] csr_num_wb;
+wire [31:0] csr_wmask_wb;
+wire [31:0] ertn_era_wb;
+wire csr_we_wb;
+wire [31:0] eentry_wb;
+wire ertn_flush_wb_top;
+wire wb_ex_top;
+wire clear_top = ertn_flush_wb_top || wb_ex_top;
 // CSR
 CSR CSR(
     .clk             (clk           ),
@@ -78,26 +93,12 @@ CSR CSR(
     .wb_esubcode     (wb_esubcode   ),
     .wb_pc           (wb_pc         ),
     .wb_ex           (wb_ex_top         ),
-    .csr_num_r       (csr_num_id    ),
+    .csr_num_r       (csr_num_id_top    ),
     .csr_num         (csr_num_wb     ),
     .csr_rvalue      (csr_rvalue    ),
     .csr_wvalue      (csr_wvalue_wb    ),
     .csr_wmask       (csr_wmask_wb   ) 
 );
-wire csr_num_id;
-wire [31:0] wb_vaddr;
-wire [5:0]  wb_ecode;
-wire [8:0]  wb_esubcode;
-wire [31:0] wb_pc;
-wire [31:0] csr_wvalue_wb;
-wire [13:0] csr_num_wb;
-wire [31:0] csr_wmask_wb;
-wire [31:0] ertn_era_wb;
-wire csr_we_wb;
-wire [31:0] eentry_wb;
-wire ertn_flush_wb_top;
-wire wb_ex_top;
-wire clear_top = ertn_flush_wb_top || wb_ex_top;
 // IF stage
 if_stage if_stage(
     .ertn_era_if    (ertn_era_wb    ),  
@@ -131,7 +132,7 @@ id_stage id_stage(
     //CSR
     .clear          (clear_top      ),
     .csr_rvalue     (csr_rvalue     ),
-    .csr_num_id     (csr_num_id     ),
+    .csr_num_id     (csr_num_id_top     ),
     .csr_num_exe    (csr_num_exe_risk),
     .csr_num_mem    (csr_num_mem_risk),
     .csr_num_wb     (csr_num_wb_risk),

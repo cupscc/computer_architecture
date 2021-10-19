@@ -231,7 +231,9 @@ always @(posedge clk) begin
     else if (ds_allowin) begin 
         ds_valid <= fs_to_ds_valid;
     end
-
+    if (reset) begin
+        fs_to_ds_bus_r <= 300'b0;
+    end
     if (fs_to_ds_valid && ds_allowin) begin
         fs_to_ds_bus_r <= fs_to_ds_bus;
     end
@@ -291,25 +293,26 @@ assign inst_add_w = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op
     assign inst_mod_w   = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h2] & op_19_15_d[5'h01];
     assign inst_div_wu  = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h2] & op_19_15_d[5'h02];
     assign inst_mod_wu  = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h2] & op_19_15_d[5'h03];
+    //priviledge
     assign inst_syscall = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h2] & op_19_15_d[5'h16];
     assign inst_break   = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h2] & op_19_15_d[5'h14];
     assign inst_ertn    = op_31_26_d[6'h01] & op_25_22_d[4'h9] & op_21_20_d[2'h0] & op_19_15_d[5'h10] & op_14_10_d[5'h0d];
     assign inst_csrrd   = op_31_26_d[6'h01] & (op_25_24 == 2'b0) & (rj == 5'b0);
     assign inst_csrwr   = op_31_26_d[6'h01] & (op_25_24 == 2'b0) & (rj == 5'b1);
     assign inst_csrxchg = op_31_26_d[6'h01] & (op_25_24 == 2'b0) & (rj != 5'b1 && rj != 5'b0);
-
+    //ld
     assign inst_ld_w = op_31_26_d[6'h0a]  & op_25_22_d[4'h2];
     assign inst_ld_b = op_31_26_d[6'h0a]  & op_25_22_d[4'h0];
     assign inst_ld_h = op_31_26_d[6'h0a]  & op_25_22_d[4'h1];
     assign inst_ld_bu = op_31_26_d[6'h0a] & op_25_22_d[4'h8];
     assign inst_ld_hu = op_31_26_d[6'h0a] & op_25_22_d[4'h9];
-
+    //st
     assign inst_st_b = op_31_26_d[6'h0a] & op_25_22_d[4'h4];
     assign inst_st_h = op_31_26_d[6'h0a] & op_25_22_d[4'h5];
     assign inst_st_w = op_31_26_d[6'h0a] & op_25_22_d[4'h6];
-
     assign inst_jirl = op_31_26_d[6'h13];
     assign inst_b    = op_31_26_d[6'h14];
+    //b_type
     assign inst_bl   = op_31_26_d[6'h15];
     assign inst_beq  = op_31_26_d[6'h16];
     assign inst_bne  = op_31_26_d[6'h17];
@@ -317,7 +320,6 @@ assign inst_add_w = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op
     assign inst_bge  = op_31_26_d[6'h19];
     assign inst_bltu = op_31_26_d[6'h1a];
     assign inst_bgeu = op_31_26_d[6'h1b];
-
     assign inst_lu12i_w = op_31_26_d[6'h05] & ~ds_inst[25];
     assign inst_pcaddui = op_31_26_d[6'h07] & ~ds_inst[25];
 
@@ -333,7 +335,7 @@ assign exec_INE =
              inst_mod_w | inst_div_wu   | inst_mod_wu   | inst_syscall |
              inst_break | inst_ertn     | inst_csrrd    | inst_csrwr   |
              inst_csrxchg   | inst_ld   | inst_st       | inst_jirl    |
-             inst_b_type    | inst_bl); 
+             inst_b_type    | inst_bl   | inst_pcaddui  | inst_lu12i_w); 
 
 assign mul_div = {3{inst_mul_w  }}    & 3'd1 |
                  {3{inst_mulh_w }}    & 3'd2 |
@@ -421,9 +423,11 @@ regfile u_regfile(
     .waddr  (rf_waddr ),
     .wdata  (rf_wdata )
     );
-wire csr_risk_delay =   csr_re_id & (   (csr_num_id == csr_num_exe) ||      //CSR写后读可能发生的冲突用阻塞解�?
-                                        (csr_num_id == csr_num_mem) ||
-                                        (csr_num_id == csr_num_wb)  );
+wire csr_risk_exe  = (csr_num_id == csr_num_exe);
+wire csr_risk_mem  = (csr_num_id == csr_num_mem);
+wire csr_risk_wb   = (csr_num_id == csr_num_wb );
+assign csr_risk_delay =   csr_re_id & ( csr_risk_exe | csr_risk_mem  | csr_risk_wb);   //CSR写后读可能发生的冲突用阻塞解Jue
+                        
                         
 assign data_risk_delay = (rj == exe_mem_waddr) & (rj != 5'b0) & (|exe_mem_waddr) ||
                         (rd == exe_mem_waddr) & (rd != 5'b0) & (|exe_mem_waddr) ||

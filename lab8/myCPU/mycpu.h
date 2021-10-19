@@ -1,6 +1,6 @@
 `ifndef MYCPU_H
     `define MYCPU_H
-
+//make all the bus 300 bits (convenient)
     `define BR_BUS_WD       33 //32 + 1
     `define FS_TO_DS_BUS_WD 300//64 + 1(exec_ADEF)
     `define DS_TO_ES_BUS_WD 300//151+ 3(mul_div) + 3(ld) + 2(st) + 4(exec_INE,exec_SYS,exec_BRK) + 14(csr_num) + 1(csr_we)

@@ -27,6 +27,7 @@ module exe_stage(
     output [31:0] data_sram_addr ,
     output [31:0] data_sram_wdata
 );
+wire [13:0] csr_num_exe_temp;
 wire ertn_flush_exe;
 wire [31:0] csr_wmask_exe;
 wire [31:0] csr_rvalue_exe;
@@ -60,13 +61,14 @@ assign exe_waddr = es_dest & {5{es_gr_we}} & {5{es_to_ms_valid}};
 
 wire [2:0] ld_code;
 wire [1:0] st_code;
+assign csr_num_exe = csr_num_exe_temp & {14{es_to_ms_valid}}
 assign {
         ertn_flush_exe, //243
         csr_wmask_exe,  //242:211 
         csr_rvalue_exe,  //210:179
         csr_re_exe,     //178
         csr_we_exe,     //177
-        csr_num_exe,//176:163
+        csr_num_exe_temp,//176:163
         exec_SYS, //162
         exec_BRK, //161
         exec_ADEF,//160
@@ -113,7 +115,7 @@ assign es_to_ms_bus = {
                         csr_wvalue_exe,  //163:132  //wvalue
                         csr_re_exe,      //131
                         csr_we_exe,      //130
-                        csr_num_exe,     //129:126
+                        csr_num_exe_temp,     //129:116
                         exe_vaddr,       //115:84
                         exec_SYS,        //83
                         exec_BRK,        //82
@@ -143,7 +145,7 @@ always @(posedge clk) begin
         es_valid <= ds_to_es_valid;
     end
     if (reset) begin
-        ds_to_es_bus_r <= 150'b0;
+        ds_to_es_bus_r <= 300'b0;
     end
     else if (ds_to_es_valid && es_allowin) begin
         ds_to_es_bus_r <= ds_to_es_bus;
@@ -156,11 +158,11 @@ assign es_alu_src1 = es_src1_is_pc  ? es_pc[31:0] :
 assign es_alu_src2 = es_src2_is_imm ? es_imm : 
                                       es_rkd_value;
 
-wire op_ld_w    = (ld_code == 3'b000);
-wire op_ld_b    = (ld_code == 3'b001);
-wire op_ld_bu   = (ld_code == 3'b010);
-wire op_ld_h    = (ld_code == 3'b011);
-wire op_ld_hu   = (ld_code == 3'b100);
+wire op_ld_w    = (ld_code == 3'b000) & es_res_from_mem;    //load
+wire op_ld_b    = (ld_code == 3'b001) & es_res_from_mem;    //load
+wire op_ld_bu   = (ld_code == 3'b010) & es_res_from_mem;    //load
+wire op_ld_h    = (ld_code == 3'b011) & es_res_from_mem;    //load
+wire op_ld_hu   = (ld_code == 3'b100) & es_res_from_mem;    //load
 alu u_alu(
     .clk        (clk          ),
     .mul_div    (es_mul_div   ),
@@ -170,9 +172,9 @@ alu u_alu(
     .alu_result (es_alu_result)
     );
 
-wire op_st_b = (st_code == 2'b01);
-wire op_st_h = (st_code == 2'b10);
-wire op_st_w = (st_code == 2'b00);
+wire op_st_b = (st_code == 2'b01) & es_mem_we;      //store
+wire op_st_h = (st_code == 2'b10) & es_mem_we;      //store
+wire op_st_w = (st_code == 2'b00) & es_mem_we;      //store
 wire [3:0] st_wen_b = 1'b1 << data_sram_addr[1:0];
 wire [3:0] st_wen_h = 2'b11<< data_sram_addr[1:0];
 wire [3:0] st_wen_w = 4'b1111;

@@ -22,6 +22,7 @@ module mem_stage(
     //from data-sram
     input  [31                 :0] data_sram_rdata
 );
+wire [13:0] csr_num_mem_temp;
 wire ertn_flush_mem;
 wire [31:0] csr_wmask_mem;
 wire [31:0] csr_wvalue_mem;
@@ -50,6 +51,7 @@ wire [2:0] ld_code;
 wire [1:0] st_code;
 wire [1:0] ld_off;
 wire [31:0] mem_vaddr;
+assign csr_num_mem = csr_num_mem_temp & {14{ms_to_ws_valid}};
 assign {
         csr_rvalue_mem,  //228:197
         ertn_flush_mem,  //196
@@ -57,7 +59,7 @@ assign {
         csr_wvalue_mem,  //163:132
         csr_re_mem,      //131
         csr_we_mem,      //130
-        csr_num_mem,     //129:116
+        csr_num_mem_temp,     //129:116
         mem_vaddr,       //115:84
         exec_SYS, //83
         exec_BRK, //82
@@ -85,7 +87,7 @@ assign ms_to_ws_bus = {
                        csr_wmask_mem,   //154:123
                        csr_re_mem,      //122
                        csr_we_mem,      //121
-                       csr_num_mem,     //120:107
+                       csr_num_mem_temp,     //120:107
                        mem_vaddr,       //106:75
                        exec_SYS,        //74
                        exec_BRK,        //73
@@ -109,7 +111,7 @@ always @(posedge clk) begin
         ms_valid <= es_to_ms_valid;
     end
     if (reset) begin    
-        es_to_ms_bus_r <= 72'b0;
+        es_to_ms_bus_r <= 300'b0;
     end
     else if (es_to_ms_valid && ms_allowin) begin
         es_to_ms_bus_r  <= es_to_ms_bus;
